@@ -1,2 +1,2 @@
-# NEST
+# Nest.js
 Study Nest
