@@ -1,6 +1,9 @@
 // import { CUSTOM_ROUTE_ARGS_METADATA } from '@nestjs/common/constants';
 import { readFile, writeFile } from 'fs/promises';
+import { Injectable } from '@nestjs/common';
 
+// repository클래스도 service클래스가 의존성을 가지기 때문에 의존성 주입 설정을 해줌
+@Injectable()
 export class MessagesRepository {
   // 하나의 값 가져오기
   async findOne(id: string) {
@@ -12,7 +15,6 @@ export class MessagesRepository {
   async findAll() {
     const contents = await readFile('messages.json', 'utf-8');
     const messages = JSON.parse(contents);
-
     return messages;
   }
 

@@ -1,15 +1,17 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateMessageDto } from './dtos/create-message.dto';
 import { MessagesService } from './messages.service';
 
 @Controller('messages')
 export class MessagesController {
-  messageService: MessagesService;
-
-  constructor() {
-    // 마찬가지로 의존성 주입
-    this.messageService = new MessagesService();
-  }
+  constructor(public messageService: MessagesService) {}
   @Get()
   listOfMessages() {
     return this.messageService.findAll();
@@ -22,7 +24,13 @@ export class MessagesController {
   }
 
   @Get('/:id')
-  getMessages(@Param('id') id: string) {
+  async getMessages(@Param('id') id: string) {
+    // 하나 검색한 result
+    const msg = await this.messageService.findOne(id);
+
+    if (!msg) {
+      throw new NotFoundException('message does not exist!');
+    }
     return this.messageService.findOne(id);
   }
 }
